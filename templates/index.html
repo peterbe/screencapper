@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <title>Screencapper</title>
+  <style>
+  #result { display: none; border-top: 2px solid black; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Generate JPEG thumbnails from video</h2>
+  <form action="/transform" method="post">
+    <input type="text" name="url" placeholder="URL to video file"
+     style="font-size:150%;width:90%"><br>
+    <label>Number of JPEGs:</label>
+    <input type="number" name="number" value="10"
+     style="width: 100px"><br>
+    <button type="submit" style="font-size:200%">Go!</button>
+  </form>
+
+  <div id="result">
+    <h3>Result</h3>
+    <p>
+      <b>Duration:</b> <code id="duration"></code> seconds
+    </p>
+    <p>
+      <b>Download time:</b> <code id="download_time"></code> seconds<br>
+      <b>Transform time:</b> <code id="transform_time"></code> seconds<br>
+      <b>Total time:</b> <code id="total_time"></code> seconds<br>
+    </p>
+    <div id="images">
+
+    </div>
+  </div>
+
+
+<script src="/static/jquery-2.1.3.min.js"></script>
+<script src="/static/index.js"></script>
+
+</body>
+</html>
