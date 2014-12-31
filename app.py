@@ -13,8 +13,10 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 import tornado.gen
-from tornado.httpclient import AsyncHTTPClient
+from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.options import define, options
+
+# import downloader
 
 define("debug", default=False, help="run in debug mode", type=bool)
 define("port", default=8000, help="run on the given port", type=int)
@@ -122,8 +124,14 @@ class TransformHandler(tornado.web.RequestHandler):
         number = int(self.get_argument('number', 10))
 
         http_client = AsyncHTTPClient()
+        request = HTTPRequest(
+            url,
+            connect_timeout=40.0,  # default is 20 sec
+            request_timeout=40.0,  # default is 20 sec
+            follow_redirects=True
+        )
         t0 = time.time()
-        response = yield http_client.fetch(url)
+        response = yield http_client.fetch(req)
         t1 = time.time()
         download_time = t1 - t0
         url_hash = hashlib.md5(url).hexdigest()
@@ -133,6 +141,7 @@ class TransformHandler(tornado.web.RequestHandler):
                 url_hash + os.path.splitext(url)[1]
             )
             with open(file, 'wb') as f:
+                size = len(response.body)
                 f.write(response.body)
 
             duration = get_duration(file)
@@ -171,6 +180,7 @@ class TransformHandler(tornado.web.RequestHandler):
                     'transform': round(transform_time, 4),
                     'total': round(download_time + transform_time, 4),
                 },
+                'size': size,
                 'duration': duration,
                 'urls': [
                     base_url + '/' + x for x in files
