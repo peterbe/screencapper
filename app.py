@@ -131,7 +131,7 @@ class TransformHandler(tornado.web.RequestHandler):
             follow_redirects=True
         )
         t0 = time.time()
-        response = yield http_client.fetch(req)
+        response = yield http_client.fetch(request)
         t1 = time.time()
         download_time = t1 - t0
         url_hash = hashlib.md5(url).hexdigest()
