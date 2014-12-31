@@ -32,6 +32,7 @@ $(function() {
     })
     .error(function() {
       console.error(arguments);
+      $('#error').show();
     });
     return false;
   });

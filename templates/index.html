@@ -3,7 +3,8 @@
 <head>
   <title>Screencapper</title>
   <style>
-  #result { display: none; border-top: 2px solid black; margin-top: 20px; }
+  #result, #error { display: none; border-top: 2px solid black; margin-top: 20px; }
+  #error { color: darkred; border: 1px solid red;}
   </style>
 </head>
 <body>
@@ -32,6 +33,10 @@
     </div>
   </div>
 
+  <div id="error">
+    <h3>Error occurred</h3>
+    <p></p>
+  </div>
 
 <script src="/static/jquery-2.1.3.min.js"></script>
 <script src="/static/index.js"></script>
