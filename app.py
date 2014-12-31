@@ -142,20 +142,22 @@ class TransformHandler(tornado.web.RequestHandler):
 
         t0 = time.time()
         # response = yield http_client.fetch(request)
-        response = requests.get(url)
+        #response = requests.get(url)
         t1 = time.time()
         download_time = t1 - t0
         url_hash = hashlib.md5(url).hexdigest()
         with make_temp_dir(url) as temp_dir:
-            file = os.path.join(
-                temp_dir,
-                url_hash + os.path.splitext(url)[1]
-            )
-            with open(file, 'wb') as f:
-                size = len(response.content)
-                f.write(response.content)
+            # file = os.path.join(
+            #     temp_dir,
+            #     url_hash + os.path.splitext(url)[1]
+            # )
+            # with open(file, 'wb') as f:
+            #     size = len(response.content)
+            #     f.write(response.content)
+            size = None
 
-            duration = get_duration(file)
+            # duration = get_duration(file)
+            duration = get_duration(url)
             # with make_temp_dir(temp_dir) as output_temp_dir
             output = '/tmp/screencap-%02d.jpg'
             # print dir(self.application)
@@ -172,7 +174,8 @@ class TransformHandler(tornado.web.RequestHandler):
             )
             t0 = time.time()
             extract_pictures(
-                file,
+                # file,
+                url,
                 duration,
                 number,
                 output
