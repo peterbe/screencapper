@@ -168,7 +168,7 @@ class TransformHandler(tornado.web.RequestHandler):
             result = {
                 'time': {
                     'download': round(download_time, 4),
-                    'tranform': round(transform_time, 4),
+                    'transform': round(transform_time, 4),
                     'total': round(download_time + transform_time, 4),
                 },
                 'duration': duration,
