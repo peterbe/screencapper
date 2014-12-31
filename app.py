@@ -16,7 +16,15 @@ import tornado.gen
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.options import define, options
 
-# import downloader
+import requests
+
+from trequests import setup_session
+from tornalet import tornalet
+
+# Tell requests to use our AsyncHTTPadapter for the default
+# session instance, you can also pass you own through
+setup_session()
+
 
 define("debug", default=False, help="run in debug mode", type=bool)
 define("port", default=8000, help="run on the given port", type=int)
@@ -117,21 +125,24 @@ class TransformHandler(tornado.web.RequestHandler):
     #     response = yield http_client.fetch(url)
     #     return response
     #
-    @tornado.gen.coroutine
-    @tornado.web.asynchronous
+    # @tornado.gen.coroutine
+    # @tornado.web.asynchronous
+    @tornalet
     def post(self):
         url = self.get_argument('url').strip()
         number = int(self.get_argument('number', 10))
 
-        http_client = AsyncHTTPClient()
-        request = HTTPRequest(
-            url,
-            connect_timeout=40.0,  # default is 20 sec
-            request_timeout=40.0,  # default is 20 sec
-            follow_redirects=True
-        )
+        # http_client = AsyncHTTPClient()
+        # request = HTTPRequest(
+        #     url,
+        #     connect_timeout=40.0,  # default is 20 sec
+        #     request_timeout=40.0,  # default is 20 sec
+        #     follow_redirects=True
+        # )
+
         t0 = time.time()
-        response = yield http_client.fetch(request)
+        # response = yield http_client.fetch(request)
+        response = requests.get(url)
         t1 = time.time()
         download_time = t1 - t0
         url_hash = hashlib.md5(url).hexdigest()
@@ -141,8 +152,8 @@ class TransformHandler(tornado.web.RequestHandler):
                 url_hash + os.path.splitext(url)[1]
             )
             with open(file, 'wb') as f:
-                size = len(response.body)
-                f.write(response.body)
+                size = len(response.content)
+                f.write(response.content)
 
             duration = get_duration(file)
             # with make_temp_dir(temp_dir) as output_temp_dir
